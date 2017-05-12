@@ -1,0 +1,66 @@
+<script src="/views/js/edit.js"></script>
+
+ <div class="conteiner-fluid col-sm-4 col-sm-offset-2">
+        <form>
+            <fieldset>
+                <legend><%= title %></legend>
+                <div class="form-group">
+                    <label for="editBrand">Выберите марку машины:</label>
+                    <select id="editBrand" class="form-control">
+                        <option selected><%= obj[0]["brand"] %></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editModel">Выберите модель машины:</label>
+                    <select id="editModel" class="form-control">
+                        <option selected><%= obj[0]["model"] %></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDate">Введите год выпуска</label>
+                    <input id="editDate" class="form-control" value=<%= obj[0]["year"] %>>
+                </div>
+                <div class="form-group">
+                    <label for="editCost">Введите цену, BYN</label>
+                    <input id="editCost" class="form-control" value=<%= obj[0]["cost"] %>>
+                </div>
+                <div class="form-group">
+                    <label for="editMileage">Введите пробег</label>
+                    <input id="editMileage" class="form-control" value=<%= obj[0]["mileage"] %>>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="checkbox" name="transmission" checked value=<%= obj[0]["transmission"] %>><%= obj[0]["transmission"] %></input>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editVolume">Введите объем двигателя</label>
+                    <input id="editVolume" class="form-control" value=<%= obj[0]["volume"] %>>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <input type="checkbox" name="typeOfFuel" checked value=<%= obj[0]["typeOfFuel"] %>><%= obj[0]["typeOfFuel"] %></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <button class="form-control btn btn-primary" id="save">Сохранить</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="form-control btn btn-primary" id="cancel">Отменить</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="conteiner-fluid col-sm-4 col-sm-offset-1">
+        <img src=<%= obj[0]['photo'] %> class="img img-bordered" width="400px"><br/><br/>
+        <button class="btn btn-lg btn-success col-sm-offset-7">Загрузить</button>
+    </div>

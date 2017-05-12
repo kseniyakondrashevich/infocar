@@ -1,0 +1,80 @@
+{
+  "brand": {
+    "Audi": [
+      [
+        "A3",
+        "A4",
+        "TT",
+        "A5",
+        "A6"
+      ],
+      ["/views/resource/initPages/audi1.png", "/views/resource/initPages/audi2.png"]
+    ],
+    "BMW": [
+      [
+        "X1",
+        "X3",
+        "X4",
+        "X5",
+        "X6",
+        "4",
+        "M4"
+      ],
+      ["/views/resource/initPages/bmw1.png", "/views/resource/initPages/bmw2.png", "/views/resource/initPages/bmw3.png"]
+    ],
+    "Ferrari": [
+      [
+        "488 GTB",
+        "F12 Berlinetta",
+        "LaFerrari",
+        "458 Speciale"
+      ],
+      ["/views/resource/initPages/ferrari1.png", "/views/resource/initPages/ferrari2.png"]
+    ],
+    "Lamborgini": [
+      [
+        "Hurican LP",
+        "Aventador",
+        "Centanario"
+      ],
+      ["/views/resource/initPages/lamborgini1.png", "/views/resource/initPages/lamborgini2.png"]
+    ],
+    "Maserati": [
+      [
+        "Ghibli",
+        "Quattroporte"
+      ],
+      ["/views/resource/initPages/maserati1.png", "/views/resource/initPages/maserati2.png"]
+    ],
+    "Chevrolet": [
+      [
+        "Camaro",
+        "Corvette",
+        "Niva",
+        "Tahoe"
+      ],
+      ["/views/resource/initPages/chevrolet1.png", "/views/resource/initPages/chevrolet2.png"]
+    ],
+    "Peugeot": [
+      [
+        "408",
+        "508"
+      ],
+      ["/views/resource/initPages/peugeot1.png", "/views/resource/initPages/peugeot2.png"]
+    ],
+    "Bentley": [
+      [
+        "Flying Spur",
+        "Continental GT",
+        "Mulsanne"
+      ],
+      ["/views/resource/initPages/bentley1.png", "/views/resource/initPages/bentley2.png"]
+    ]
+  },
+  "transmission":["Механика", "Автомат"],
+  "typeOfFuel":["Бензин", "Дизель"],
+  "mileage":[300000, 50000, 60000, 300000, 2000, 80000, 90000, 100000],
+  "year":[1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2015,1017],
+  "volume":[4000,3000,2000,1000,1500,2500,3500],
+  "cost":[11900000,12708000,21419000,1028000,1860000,5900000,4800000,6000000,7290000]
+}

@@ -1,0 +1,21 @@
+<script src="/views/js/mainTable.js"></script>
+
+<div class="container" id="table">
+    <table class="table table-bordered table-condensed" id="table-ins">
+        <% let count=0; for(let i=0; i<5; i++){ %>
+            <tr>
+                <% for(let j=0; j<5; j++){ %>
+                <td>
+                    <img src=<%= mas[count]['photo']%> class="img-responsive" alt="car">
+                    <h6><b><%= mas[count]['brand'] %> <%= mas[count]['model'] %></b>, <%= mas[count]['mileage'] %> км</h6>
+                    <h6><%= mas[count]['cost'] %>BYN, <%= mas[count]['cost']*0.53 %>$,<%= mas[count]['cost']*0.48 %>euro</h6>
+                    <div class="hidden"><%= mas[count]['id_car']%></div>
+                </td>
+                <% count++ } %>
+            </tr>
+        <% } %>
+    </table>
+</div>
+
+<div class="container" id="more"></div>
+

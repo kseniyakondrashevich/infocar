@@ -1,0 +1,24 @@
+{
+  "name": "SPA",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gitrep"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.4.0",
+    "body-parser": "^1.16.0",
+    "express": "^4.15.2",
+    "jquery": "^3.2.1",
+    "just": "^0.1.8",
+    "mysql": "^2.13.0",
+    "requirejs": "2.3.3"
+  }
+}
