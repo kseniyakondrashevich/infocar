@@ -1,4 +1,4 @@
-<script src="/views/js/edit.js"></script>
+<script src="/car/presenter/editCar.js"></script>
 
  <div class="conteiner-fluid col-sm-4 col-sm-offset-2">
         <form>
@@ -7,42 +7,42 @@
                 <div class="form-group">
                     <label for="editBrand">Выберите марку машины:</label>
                     <select id="editBrand" class="form-control">
-                        <option selected><%= obj[0]["brand"] %></option>
+                        <option selected><%= obj["brand"] %></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="editModel">Выберите модель машины:</label>
                     <select id="editModel" class="form-control">
-                        <option selected><%= obj[0]["model"] %></option>
+                        <option selected><%= obj["model"] %></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="editDate">Введите год выпуска</label>
-                    <input id="editDate" class="form-control" value=<%= obj[0]["year"] %>>
+                    <input id="editDate" class="form-control" value=<%= obj["year"] %>>
                 </div>
                 <div class="form-group">
                     <label for="editCost">Введите цену, BYN</label>
-                    <input id="editCost" class="form-control" value=<%= obj[0]["cost"] %>>
+                    <input id="editCost" class="form-control" value=<%= obj["cost"] %>>
                 </div>
                 <div class="form-group">
                     <label for="editMileage">Введите пробег</label>
-                    <input id="editMileage" class="form-control" value=<%= obj[0]["mileage"] %>>
+                    <input id="editMileage" class="form-control" value=<%= obj["mileage"] %>>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-6">
-                            <input type="checkbox" name="transmission" checked value=<%= obj[0]["transmission"] %>><%= obj[0]["transmission"] %></input>
+                            <input type="checkbox" name="transmission" checked value=<%= obj["transmission"] %>> <%= obj["transmission"] %>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="editVolume">Введите объем двигателя</label>
-                    <input id="editVolume" class="form-control" value=<%= obj[0]["volume"] %>>
+                    <input id="editVolume" class="form-control" value= <%= obj["volume"] %>>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4">
-                            <input type="checkbox" name="typeOfFuel" checked value=<%= obj[0]["typeOfFuel"] %>><%= obj[0]["typeOfFuel"] %></button>
+                            <input type="checkbox" name="typeOfFuel" checked value= <%= obj["typeOfFuel"] %>> <%= obj["typeOfFuel"] %>
                         </div>
                     </div>
                 </div>
@@ -61,6 +61,6 @@
     </div>
 
     <div class="conteiner-fluid col-sm-4 col-sm-offset-1">
-        <img src=<%= obj[0]['photo'] %> class="img img-bordered" width="400px"><br/><br/>
+        <img src=<%= obj['photo'] %> class="img img-bordered" width="400px"><br/><br/>
         <button class="btn btn-lg btn-success col-sm-offset-7">Загрузить</button>
     </div>
