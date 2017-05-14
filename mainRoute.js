@@ -29,6 +29,8 @@ router.get('/admin/edit', home(db).getEditPage);
 
 router.get('/admin/delete', home(db).deleteRecord);
 
+router.post('/admin/save', home(db).saveRecord);
+
 router.get('*', home(db).getHomePage);
 
 

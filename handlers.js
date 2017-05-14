@@ -5,7 +5,7 @@
 function home(db) {
 
     function getHomePage(req, res) {
-        res.sendFile(__dirname + '/public/views/index.html');
+        res.sendFile(__dirname + '/public/index.html');
     }
     
     function getMainTable(req, res) {
@@ -29,7 +29,6 @@ function home(db) {
     }
 
     function getFilterData(req, res) {
-        console.log(2);
         db.filterData(function (result) {
             res.send(JSON.stringify(result));
         })
@@ -42,22 +41,25 @@ function home(db) {
     }
 
     function getFilter(req, res) {
-        console.log(1);
         db.filter(req.query, function (result) {
             res.send(JSON.stringify(result));
         })
     }
 
     function getEditPage(req, res) {
-        console.log(1);
         db.getEditCar(req.query, function (result) {
             res.send(JSON.stringify(result));
         })
     }
 
     function deleteRecord(req, res) {
-        console.log(2);
         db.executeDelete(req.query, function (result) {
+            res.send(JSON.stringify(result));
+        })
+    }
+
+    function saveRecord(req, res) {
+        db.executeInsert(req.body, function (result) {
             res.send(JSON.stringify(result));
         })
     }
@@ -71,7 +73,8 @@ function home(db) {
         getAdminPage : getAdminPage,
         getFilter : getFilter,
         getEditPage : getEditPage,
-        deleteRecord : deleteRecord
+        deleteRecord : deleteRecord,
+        saveRecord : saveRecord
     }
 }
 

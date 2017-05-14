@@ -1,4 +1,4 @@
-<script src="/main_table/presenter/mainTable.js"></script>
+<script src="/main_table/presenter/mainTableHandlers.js"></script>
 
 <div class="container" id="table">
     <table class="table table-bordered table-condensed" id="table-ins">
@@ -8,7 +8,7 @@
                 <td>
                     <img src=<%= mas[count]['photo']%> class="img-responsive" alt="car">
                     <h6><b><%= mas[count]['brand'] %> <%= mas[count]['model'] %></b>, <%= mas[count]['mileage'] %> км</h6>
-                    <h6><%= mas[count]['cost'] %>BYN, <%= mas[count]['cost']*0.53 %>$,<%= mas[count]['cost']*0.48 %>euro</h6>
+                    <h6><%= mas[count]['cost'] %>BYN, <%= (mas[count]['cost']*0.53).toFixed(1) %>$,<%= (mas[count]['cost']*0.48).toFixed(1) %>euro</h6>
                     <div class="hidden"><%= mas[count]['id_car']%></div>
                 </td>
                 <% count++ } %>

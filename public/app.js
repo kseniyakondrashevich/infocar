@@ -30,7 +30,6 @@ require(['home', 'car', 'searchF', 'admin'], function (home, car, searchF, admin
         let pathname = window.location.pathname;
         let hash = window.location.hash;
         let url = pathname+hash;
-        alert(0);
 
         if(/^\/$/.test(url)){
             home.homePage();
@@ -48,11 +47,16 @@ require(['home', 'car', 'searchF', 'admin'], function (home, car, searchF, admin
             searchF.getFilterPage(hash.substr(9, hash.length));
         }
         else if(/^\/#admin\/edit\/\?id=.*/.test(url)){
-            alert(1);
             car.getEditPage(hash.substr(16, hash.length));
         }
         else if(/^\/#admin\/delete\/\?id=.*/.test(url)){
             car.deleteCar(hash.substr(18, hash.length));
+        }
+        else if(/^\/#admin\/new\/?$/.test(url)){
+            car.getNewPage();
+        }
+        else if(/^\/#admin\/new\/save\/?$/.test(url)){
+            car.getSavePage();
         }
 
     });

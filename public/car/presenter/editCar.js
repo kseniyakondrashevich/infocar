@@ -13,8 +13,11 @@ define(['render'], function (render) {
         },
 
         setEditPage : function (ans) {
-            alert(3);
-            render.renderFile('./car/view/editCar', {title: 'Редактирование', obj: ans[0]}, 'insert', $('#main-container'));
+            render.renderFile('./car/view/editCar', {title: 'Редактирование'/*, obj: ans[0]*/}, 'insert', $('#main-container'));
+        },
+
+        setNewPage : function () {
+            render.renderFile('./car/view/editCar', {title: 'Добавление'}, 'insert', $('#main-container'));
         },
 
         setEditData : function (ans) {
@@ -23,11 +26,33 @@ define(['render'], function (render) {
         },
 
         setDeletePage : function () {
-            render.renderFile('Удаление прошло успешно', 'insert', $('#main-container'));
+            render.renderFile('./partials/info', {title: 'Удаление прошло успешно', text:''}, 'insert', $('#main-container'));
         },
 
         setDeleteError : function () {
-            render.renderFile('Не удалось удалить данную запись', 'insert', $('#main-container'));
+            render.renderFile('./partials/info', {title: 'Не удалось удалить данную запись', text:''}, 'insert', $('#main-container'));
+        },
+
+        setSavePage : function () {
+            render.renderFile('./partials/info', {title: 'Запись успешно добавлена', text:''}, 'insert', $('#main-container'));
+        },
+
+        pickUp: function () {
+            alert(3);
+            event.preventDefault();
+            let obj = {};
+            obj.brand = $('#editBrand option:selected').text();
+            obj.model = $('#editModel option:selected').text();
+            obj.date = $('#editDate').val();
+            obj.cost = $('#editCost').val();
+            obj.mileage = $('#editMileage').val();
+            obj.transmission = $('input[name="transmission"]:checked').val();
+            obj.typeOfFuel = $('input[name="typeOfFuel"]:checked').val();
+            obj.volume = $('#editVolume').val();
+            obj.image = $('#image').attr('src');
+
+            alert(JSON.stringify(obj));
+            return obj;
         }
     }
 });

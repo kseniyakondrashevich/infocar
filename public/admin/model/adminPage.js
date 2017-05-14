@@ -19,14 +19,6 @@ define(['adminTable'], function (adminTable) {
                         adminTable.setError();
                     }
                     else {
-                        $.get('/view/partials/buttonAdd.html')
-                            .done(function (html) {
-                                adminTable.setButtonAdd(html);
-                            })
-                            .fail(function () {
-                                adminTable.setError();
-                            });
-
                         adminTable.setAdminPage(JSON.parse(ans));
                     }
                 })

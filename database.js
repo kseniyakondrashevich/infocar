@@ -5,7 +5,7 @@
 const database = require('./db-init');
 
 let db = function () {
-    const allCarColumns = ['id_car', 'brand', 'model', 'year', 'mileage', 'cost', 'typeOfFuel', 'volume', 'popularity'];
+    const allCarColumns = ['brand', 'model', 'year', 'mileage', 'cost', 'typeOfFuel', 'volume', 'transmission'];
     const carColumns = ['brand', 'model', 'year', 'mileage', 'cost', 'typeOfFuel', 'volume'];
     const allImageColumns = ['id_image', 'photo', 'id_car'];
     let sql;
@@ -159,9 +159,52 @@ let db = function () {
         });
     }
 
-    /*function executeDelete(id, callback) {
-        sql= "DELETE FROM"
-    }*/
+    function executeDelete(id, callback) {
+        sql= "DELETE FROM car " +
+            "WHERE " +
+            "id_car="+id["id"];
+
+        database.get().query(sql, function (err, result) {
+            if(err)
+                throw err;
+            callback (result);
+        });
+    }
+
+    function executeInsert(data, callback) {
+        sql="INSERT INTO coursesdb.car " +
+            "("
+            + allCarColumns.join(',') +
+            ")" +
+            " VALUES " +
+            "(" +
+            "'"+data.brand+"'," +
+            "'"+data.model+"'," +
+            data.date+"," +
+            data.mileage+"," +
+            data.cost+"," +
+            "'"+data.typeOfFuel+"'," +
+            data.volume+"," +
+            "'"+data.transmission+"'" +
+            ");";
+
+        database.get().query(sql, function (err, result) {
+            if(err)
+                throw err;
+            sql="INSERT INTO coursesdb.image " +
+                "( photo, id_car ) " +
+                "VALUES ("
+                +"'"+data.image+"'" +
+                ", (select last_insert_id() from coursesdb.car limit 1));";
+
+                database.get().query(sql, function (err, result) {
+                    if(err)
+                        throw err;
+                    console.log(result);
+                    callback (result);
+                });
+        });
+    }
 
     return{
         select25 : select25,
@@ -170,7 +213,9 @@ let db = function () {
         filterData : filterData,
         admin: admin,
         filter : filter,
-        getEditCar : getEditCar
+        getEditCar : getEditCar,
+        executeDelete : executeDelete,
+        executeInsert : executeInsert
     }
 }();
 
