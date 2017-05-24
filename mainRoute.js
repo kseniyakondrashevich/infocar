@@ -21,15 +21,21 @@ router.get('/search', home(db).getSearch);
 
 router.get('/filterData', home(db).getFilterData);
 
+router.get('/brand', home(db).getBrand);
+
+router.get('/model', home(db).getModel);
+
 router.get('/filter', home(db).getFilter);
 
-router.get('/admin', home(db).getAdminPage);
+router.post('/admin/edit/save', home(db).updateRecord);
+
+router.post('/admin/new/save', home(db).saveRecord);
 
 router.get('/admin/edit', home(db).getEditPage);
 
 router.get('/admin/delete', home(db).deleteRecord);
 
-router.post('/admin/save', home(db).saveRecord);
+router.get('/admin', home(db).getAdminPage);
 
 router.get('*', home(db).getHomePage);
 

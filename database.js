@@ -81,12 +81,12 @@ let db = function () {
 
     function filterData(callback) {
         res={};
-        sql = "SELECT DISTINCT brand from coursesdb.car";
+        sql = "SELECT DISTINCT brand from car";
         database.get().query(sql, function (err, result) {
             if(err) throw err;
             res["brand"]=getUniqueArray(result);
         });
-        sql = "SELECT DISTINCT model from coursesdb.car";
+        sql = "SELECT DISTINCT model from car";
         database.get().query(sql, function (err, result) {
             if(err) throw err;
             res["model"]=getUniqueArray(result);
@@ -94,7 +94,26 @@ let db = function () {
         });
     }
 
+    function getBrand(callback) {
+        sql = "SELECT DISTINCT brand from car";
+        database.get().query(sql, function (err, result) {
+            if(err) throw err;
+            callback(result);
+        });
+    }
+
+    function getModel(query, callback) {
+        sql = "SELECT DISTINCT model from car";
+        if(query.brand)
+            sql+=" WHERE brand='"+ query.brand+"'";
+        database.get().query(sql, function (err, result) {
+            if(err) throw err;
+            callback(result);
+        });
+    }
+
     function admin(callback) {
+        console.log('admin!!!');
         sql = "SELECT *" +
             "from car inner join image " +
             "on car.id_car=image.id_car;";
@@ -159,10 +178,10 @@ let db = function () {
         });
     }
 
-    function executeDelete(id, callback) {
+    function executeDelete(data, callback) {
         sql= "DELETE FROM car " +
             "WHERE " +
-            "id_car="+id["id"];
+            "id_car="+data.data;
 
         database.get().query(sql, function (err, result) {
             if(err)
@@ -172,7 +191,7 @@ let db = function () {
     }
 
     function executeInsert(data, callback) {
-        sql="INSERT INTO coursesdb.car " +
+        sql="INSERT INTO car " +
             "("
             + allCarColumns.join(',') +
             ")" +
@@ -180,7 +199,7 @@ let db = function () {
             "(" +
             "'"+data.brand+"'," +
             "'"+data.model+"'," +
-            data.date+"," +
+            data.year+"," +
             data.mileage+"," +
             data.cost+"," +
             "'"+data.typeOfFuel+"'," +
@@ -191,18 +210,58 @@ let db = function () {
         database.get().query(sql, function (err, result) {
             if(err)
                 throw err;
-            sql="INSERT INTO coursesdb.image " +
+            sql="INSERT INTO image " +
                 "( photo, id_car ) " +
                 "VALUES ("
-                +"'"+data.image+"'" +
-                ", (select last_insert_id() from coursesdb.car limit 1));";
+                +"'"+data.photo+"'" +
+                ", (select last_insert_id() from car limit 1));";
+
+            database.get().query(sql, function (err, result) {
+                if(err)
+                    throw err;
+
+                sql = "SELECT * FROM car INNER JOIN image on car.id_car=image.id_image WHERE car.id_car=(select last_insert_id() from car limit 1);";
 
                 database.get().query(sql, function (err, result) {
-                    if(err)
+                    if (err)
                         throw err;
                     console.log(result);
-                    callback (result);
+                    callback(result);
                 });
+            });
+        });
+    }
+
+    function executeUpdate(data, callback) {
+        sql = "UPDATE car SET " +
+            "brand = '" + data.brand +"', " +
+            "model = '" + data.model +"', " +
+            "year = " + data.year +", " +
+            "mileage = " + data.mileage +", " +
+            "cost = " + data.cost +", " +
+            "typeOfFuel = '" + data.typeOfFuel +"', " +
+            "volume = " + data.volume +", " +
+            "transmission = '" + data.transmission +"' " +
+            "WHERE id_car=" + data.id_car + "; ";
+
+        database.get().query(sql, function (err, result) {
+            if(err)
+                throw err;
+            sql="UPDATE image SET " +
+                "photo = '" + data.photo +"' " +
+                "WHERE id_car=" + data.id_car + ";";
+
+            database.get().query(sql, function (err, result) {
+                if (err)
+                    throw err;
+                sql = "SELECT * FROM car inner join image on car.id_car=image.id_car WHERE car.id_car =" + data.id_car;
+                database.get().query(sql, function (err, result) {
+                    if (err)
+                        throw err;
+                    console.log(result);
+                    callback(result);
+                });
+            });
         });
     }
 
@@ -215,7 +274,10 @@ let db = function () {
         filter : filter,
         getEditCar : getEditCar,
         executeDelete : executeDelete,
-        executeInsert : executeInsert
+        executeInsert : executeInsert,
+        executeUpdate : executeUpdate,
+        getBrand : getBrand,
+        getModel : getModel
     }
 }();
 

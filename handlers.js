@@ -9,8 +9,9 @@ function home(db) {
     }
     
     function getMainTable(req, res) {
+        console.log('here');
         db.select25(function (result) {
-            res.send(JSON.stringify(result));
+            res.json(result);
         })
     }
 
@@ -30,19 +31,31 @@ function home(db) {
 
     function getFilterData(req, res) {
         db.filterData(function (result) {
-            res.send(JSON.stringify(result));
+            res.json(result);
         })
     }
 
     function getAdminPage(req, res) {
         db.admin(function (result) {
-            res.send(JSON.stringify(result));
+            res.json(result);
         })
     }
 
     function getFilter(req, res) {
         db.filter(req.query, function (result) {
             res.send(JSON.stringify(result));
+        })
+    }
+
+    function getBrand(req, res) {
+        db.getBrand(function (result) {
+            res.json(result);
+        })
+    }
+
+    function getModel(req, res) {
+        db.getModel(req.query, function (result) {
+            res.json(result);
         })
     }
 
@@ -53,14 +66,21 @@ function home(db) {
     }
 
     function deleteRecord(req, res) {
-        db.executeDelete(req.query, function (result) {
-            res.send(JSON.stringify(result));
+        db.executeDelete(req.body, function (result) {
+            res.json(result);
         })
     }
 
     function saveRecord(req, res) {
         db.executeInsert(req.body, function (result) {
-            res.send(JSON.stringify(result));
+            res.json(result);
+        })
+    }
+
+    function updateRecord(req, res) {
+        console.log('update');
+        db.executeUpdate(req.body, function (result) {
+            res.json(result);
         })
     }
 
@@ -74,7 +94,10 @@ function home(db) {
         getFilter : getFilter,
         getEditPage : getEditPage,
         deleteRecord : deleteRecord,
-        saveRecord : saveRecord
+        saveRecord : saveRecord,
+        updateRecord : updateRecord,
+        getModel : getModel,
+        getBrand : getBrand
     }
 }
 
