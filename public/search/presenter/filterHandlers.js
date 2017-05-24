@@ -63,5 +63,9 @@ let eventsHandlers = function () {
 }();
 
 $(document).ready(function () {
+
+    $("#selectBrand").kendoDropDownList();
+    $("#selectModel").kendoDropDownList();
+
     $('#apply-filter').on('click', eventsHandlers.pickUpData);
 });

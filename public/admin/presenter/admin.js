@@ -12,9 +12,13 @@ define(['render'], function (render) {
            render.renderFile('./partials/info', {title: 'Произошла ошибка', text: 'Невозможно загрузить файл'}, 'append', $('#main-container'));
        },
 
-       setAdminPage : function (ans) {
-           render.renderFile('./admin/view/admin', {mas: ans}, 'append', $('#main-container'));
+       setAdminPage : function (html) {
+           $('#main-container').html(html);
+           //render.renderFile('./admin/view/adminGrid', 'append', $('#main-container'));
+
+
        }
+
    }
 });
 

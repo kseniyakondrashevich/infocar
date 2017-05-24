@@ -8,6 +8,7 @@ requirejs.config({
         "render" : "./scripts/rendering",
 
         "home" : "./main_table/model/homePage",
+        "mainView": "./main_table/model/mainModel",
         "mainTable" : "./main_table/presenter/mainTable",
 
         "car" : "./car/model/car",
@@ -24,7 +25,7 @@ requirejs.config({
     }
 });
 
-require(['home', 'car', 'searchF', 'admin'], function (home, car, searchF, admin) {
+require(['home', 'car', 'searchF', 'admin', 'mainView'], function (home, car, searchF, admin, mainView) {
 
     $(window).on('hashchange', function () {
         let pathname = window.location.pathname;
@@ -32,7 +33,10 @@ require(['home', 'car', 'searchF', 'admin'], function (home, car, searchF, admin
         let url = pathname+hash;
 
         if(/^\/$/.test(url)){
-            home.homePage();
+            $('#main-container').load('/main_table/view/mainTable.html', function () {
+                mainView.switchOn();
+            });
+
         }
         else if(/^\/#car\/\?id=.*/.test(url)){
             car.getCarProfile(hash.substr(9, hash.length));
@@ -41,7 +45,8 @@ require(['home', 'car', 'searchF', 'admin'], function (home, car, searchF, admin
             searchF.getSearchPage(hash.substr(12, hash.length));
         }
         else if(/^\/#admin\/?$/.test(url)){
-            admin.getAdminPage();
+            alert(0);
+            $('#main-container').load('/admin/view/adminGrid.html');
         }
         else if(/^\/#filter\/\?.*/.test(url)){
             searchF.getFilterPage(hash.substr(9, hash.length));

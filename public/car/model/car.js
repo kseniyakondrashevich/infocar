@@ -64,7 +64,7 @@ define(['carProfile', 'editCar'], function (carProfile, editCar) {
         
         getSavePage : function () {
             let data = editCar.pickUp();
-            $.post('/admin/save', data, function () {
+            $.post('/admin/new/save', data, function () {
                 editCar.setSavePage();
             });
         }
