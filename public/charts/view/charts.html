@@ -1,0 +1,100 @@
+<div id="pieChart">
+    <div class="demo-section k-content">
+        <div>
+            <div data-role="chart"
+                 data-title="{ text: 'BRAND SHARE', position: 'top' }"
+                 data-legend="{position: 'top'}"
+                 data-series="[{
+                                type: 'pie',
+                                field: 'share',
+                                categoryField: 'brand',
+                                padding: 0,
+                                tooltip: {visible:true,
+                                          format: 'NO',
+                                          template: '#= category # - #= kendo.format(\'{0:P}\', percentage)#'}
+                              }]"
+                 data-series-defaults="{labels: {
+                                                template: '#= category # - #= kendo.format(\'{0:P}\', percentage)#',
+                                                position: 'insideEnd',
+                                                color: 'black',
+                                                visible: true,
+                                                background: 'transparent'
+                                         }
+                                       }"
+                 data-bind="source: brandShare" style="height: 700px">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="lineChart">
+    <div class="demo-section k-content wide">
+        <div data-role="chart"
+             data-title="{ text: 'MECHANICAL TRANSMISSION DEPENDENCE ON COST', position: 'top' }"
+             data-legend="{ position: 'bottom' }"
+             data-series="[
+                            { field: 'mechanics', name: 'Mechanical transmission' }
+                          ]"
+             data-series-defaults="{ type: 'line',
+                                    tooltip: {
+                                        visible: true,
+                                        format: 'NO',
+                                        template: '#= category # г - #=value#$'
+                                    }
+                                   }"
+
+             data-category-axis="{
+                                    field: 'year',
+                                    labels:{rotation: -90},
+                                    crosshair: {visible: true}
+                                }"
+             data-bind="source: transmissionCost" style="height: 700px">
+        </div>
+    </div>
+</div>
+
+<div id="radarChart">
+    <div class="demo-section k-content wide">
+        <div data-role="chart"
+             data-title="{ text: 'MODEL POPULARITY', position: 'top' }"
+             data-legend="{position: 'bottom'}"
+             data-series-defaults="{type: 'radarColumn',
+                                    tooltip: {
+                                        visible: true,
+                                        format: 'NO',
+                                        template: '#= category # - #=value#'
+                                    }
+                                    }"
+             data-series="[
+                            {field: 'amount', name: 'Amount'}
+                          ]"
+             data-category-axis="{field: 'model'}"
+             data-bind="source: modelFrequency" style="height: 750px">
+        </div>
+    </div>
+</div>
+
+<div id="areaChart">
+    <div class="demo-section k-content wide">
+        <div data-role="chart"
+             data-title="{ text: 'FERRARI BRAND DEPENDENCE ON COST', position: 'top' }"
+             data-legend="{position: 'bottom'}"
+             data-series-defaults="{type: 'area',
+                                    area: {line: {style: 'smooth'},
+                                    tooltip: {
+                                        visible: true,
+                                        format: 'NO',
+                                        template: '#= category # г - #=value#$'
+                                    }
+                                    }
+                                    }"
+             data-series="[
+                            {field: 'ferrariCost', name: 'Ferrari'}
+                           ]"
+             data-category-axis="{field: 'year'}"
+             data-bind="source: brandCost" style="height: 750px">
+
+        </div>
+    </div>
+</div>
+
