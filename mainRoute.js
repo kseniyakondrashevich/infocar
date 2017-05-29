@@ -37,6 +37,14 @@ router.get('/admin/delete', home(db).deleteRecord);
 
 router.get('/admin', home(db).getAdminPage);
 
+router.get('/pie', home(db).getPieChart);
+
+router.get('/line', home(db).getLineChart);
+
+router.get('/radar', home(db).getRadarChart);
+
+router.get('/area', home(db).getAreaChart);
+
 router.get('*', home(db).getHomePage);
 
 

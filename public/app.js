@@ -1,71 +1,85 @@
-/**
- * Created by User on 07.05.2017.
- */
-
 requirejs.config({
     paths: {
-        "just" : "./scripts/just.min",
-        "render" : "./scripts/rendering",
+        "data" : "./js/data",
 
-        "home" : "./main_table/model/homePage",
-        "mainView": "./main_table/model/mainModel",
-        "mainTable" : "./main_table/presenter/mainTable",
+        "main" : "./js/main/mainModel",
+        "details" : "./js/details/detailsModel",
+        "search" : "./js/search/searchModel",
+        "filter" : "./js/filter/filterModel",
+        "chart" : "./js/charts/chartModels",
 
-        "car" : "./car/model/car",
-        "carProfile" : "./car/presenter/carProfile",
-        "editCar" : "./car/presenter/editCar",
-
-        "searchF" : "./search/model/searchAndFilter",
-        "filter" : "./search/presenter/filter",
-        "search" : "./search/presenter/search",
-
-        "admin" : "./admin/model/adminPage",
-        "adminTable" : "./admin/presenter/admin"
-
+        "admin" : "./js/admin/adminModel"
     }
 });
 
-require(['home', 'car', 'searchF', 'admin', 'mainView'], function (home, car, searchF, admin, mainView) {
+require(['data', 'main', 'details', 'search', 'filter', 'chart', 'admin'], function (data, main, details, search, filter, chart, admin) {
 
-    $(window).on('hashchange', function () {
-        let pathname = window.location.pathname;
-        let hash = window.location.hash;
-        let url = pathname+hash;
+    let layout =new kendo.Layout('<header></header><div id="main-container"></div><footer></footer>');
+    let searchView = new kendo.View('search-filter-template');
+    let mainView = new kendo.View('main-view-template', {model: main.mainModel});
+    let carDetails = new kendo.View('car-details', {model: details.detailsModel});
+    let searchResults = new kendo.View('results-template', {model: search.searchModel});
+    let filterView = new kendo.View('filter-template', {model: filter.filterModel});
+    let adminView = new kendo.View('<div id="grid"></div>');
+    let chartView = new kendo.View('chart-template');
+    let pieChart = new kendo.View('pie-chart-template', {model: chart.pieChartModel});
+    let lineChart = new kendo.View('line-chart-template', {model: chart.lineChartModel});
+    let radarChart = new kendo.View('radar-chart-template', {model: chart.radarChartModel});
+    let areaChart = new kendo.View('area-chart-template', {model: chart.areaChartModel});
 
-        if(/^\/$/.test(url)){
-            $('#main-container').load('/main_table/view/mainTable.html', function () {
-                mainView.switchOn();
-            });
 
+
+
+    let mainRouter = new kendo.Router({
+        routeMissing: function(e) { console.log(e.url) } ,
+        init: function () {
+            layout.render($('#body'));
         }
-        else if(/^\/#car\/\?id=.*/.test(url)){
-            car.getCarProfile(hash.substr(9, hash.length));
-        }
-        else if(/^\/#search\/\?id=.*/.test(url)){
-            searchF.getSearchPage(hash.substr(12, hash.length));
-        }
-        else if(/^\/#admin\/?$/.test(url)){
-            alert(0);
-            $('#main-container').load('/admin/view/adminGrid.html');
-        }
-        else if(/^\/#filter\/\?.*/.test(url)){
-            searchF.getFilterPage(hash.substr(9, hash.length));
-        }
-        else if(/^\/#admin\/edit\/\?id=.*/.test(url)){
-            car.getEditPage(hash.substr(16, hash.length));
-        }
-        else if(/^\/#admin\/delete\/\?id=.*/.test(url)){
-            car.deleteCar(hash.substr(18, hash.length));
-        }
-        else if(/^\/#admin\/new\/?$/.test(url)){
-            car.getNewPage();
-        }
-        else if(/^\/#admin\/new\/save\/?$/.test(url)){
-            car.getSavePage();
-        }
+    });
+
+    mainRouter.route("/", function() {
+        main.mainModel.setCars();
+        layout.showIn('#main-container', mainView);
+    });
+
+    mainRouter.route("/car/:id", function (itemID) {
+        data.cars.fetch(function (e) {
+            if (details.detailsModel.get("current")) {
+                layout.showIn("#main-container", carDetails);
+                details.detailsModel.setCurrent(itemID);
+            } else {
+                details.detailsModel.setCurrent(itemID);
+                layout.showIn("#main-container", carDetails);
+            }
+        });
+    });
+
+    mainRouter.route("/search", function (params) {
+        search.searchModel.setSearchResults(params.id);
+        layout.showIn('#main-container', searchView);
+        layout.showIn('#results-place', searchResults);
+        layout.showIn('#filter-place', filterView);
+    });
+
+    mainRouter.route("/charts", function () {
+        layout.showIn('#main-container', chartView);
+        layout.showIn('#radar-place', radarChart);
+        layout.showIn('#pie-place', pieChart);
+        layout.showIn('#line-place', lineChart);
+        layout.showIn('#area-place', areaChart);
+    });
+
+    mainRouter.route("/admin", function () {
+        layout.showIn('#main-container', adminView);
+        admin.initGrid($('#grid'));
 
     });
 
-    $(window).trigger('hashchange');
-
+    $(function() {
+        mainRouter.start();
+    });
 });
+
+
+
+

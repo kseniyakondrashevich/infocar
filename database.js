@@ -3,6 +3,7 @@
  */
 
 const database = require('./db-init');
+const async = require('async');
 
 let db = function () {
     const allCarColumns = ['brand', 'model', 'year', 'mileage', 'cost', 'typeOfFuel', 'volume', 'transmission'];
@@ -12,17 +13,14 @@ let db = function () {
 
     function select25(callback) {
         sql = "SELECT " +
-            "car.id_car, " +
-            carColumns.join(', ') + ", " +
-            allImageColumns[1] +" " +
+            "car.id_car, transmission, " +
+            carColumns.join(', ') + ", photo " +
             "FROM car INNER JOIN image " +
             "ON car.id_car=image.id_car " +
             "ORDER BY popularity DESC " +
             "limit 25;";
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function (result) {
             callback (result);
         });
     }
@@ -37,16 +35,15 @@ let db = function () {
             "ON car.id_car=image.id_car " +
             "WHERE car.id_car= "+ id["id"] +";";
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(result){
             callback (result);
         });
     }
 
     function search(searchEl, callback) {
+        console.log('heySearch');
         sql = "SELECT " +
-            carColumns.join(', ') + ", transmission, " +allImageColumns[1] +" "+
+            carColumns.join(', ') + ", transmission, car.id_car, " +allImageColumns[1] +" "+
             "FROM car INNER JOIN image " +
             "ON car.id_car=image.id_car " +
             "WHERE " +
@@ -63,9 +60,7 @@ let db = function () {
                     "volume=" + parseInt(searchEl) + ";";
             }
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(result){
             callback (result);
         });
     }
@@ -87,18 +82,17 @@ let db = function () {
             res["brand"]=getUniqueArray(result);
         });
         sql = "SELECT DISTINCT model from car";
-        database.get().query(sql, function (err, result) {
-            if(err) throw err;
+
+        database.get().query(sql).then(function(result){
             res["model"]=getUniqueArray(result);
-            callback(res);
+            callback (result);
         });
     }
 
     function getBrand(callback) {
         sql = "SELECT DISTINCT brand from car";
-        database.get().query(sql, function (err, result) {
-            if(err) throw err;
-            callback(result);
+        database.get().query(sql).then(function(result){
+            callback (result);
         });
     }
 
@@ -106,9 +100,8 @@ let db = function () {
         sql = "SELECT DISTINCT model from car";
         if(query.brand)
             sql+=" WHERE brand='"+ query.brand+"'";
-        database.get().query(sql, function (err, result) {
-            if(err) throw err;
-            callback(result);
+        database.get().query(sql).then(function(result){
+            callback (result);
         });
     }
 
@@ -118,16 +111,14 @@ let db = function () {
             "from car inner join image " +
             "on car.id_car=image.id_car;";
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(result){
             callback (result);
         });
     }
 
     function filter(params, callback) {
         sql = "SELECT " +
-            carColumns.join(', ') + ", transmission, " +allImageColumns[1] +" "+
+            carColumns.join(', ') + ", car.id_car, transmission, " +allImageColumns[1] +" "+
             "FROM car INNER JOIN image " +
             "ON car.id_car=image.id_car ";
 
@@ -137,14 +128,18 @@ let db = function () {
                 sql+="brand='"+params["brand"]+"' AND ";
             if(params["model"]!=undefined)
                 sql+="model='"+params["model"]+"' AND ";
-            if(params["dateFrom"]!=undefined)
-                sql+="year>="+params["dateFrom"]+" AND ";
-            if(params["dateTo"]!=undefined)
-                sql+="year<="+params["dateTo"]+" AND ";
+            if(params["yearFrom"]!=undefined)
+                sql+="year>="+params["yearFrom"]+" AND ";
+            if(params["yearTo"]!=undefined)
+                sql+="year<="+params["yearTo"]+" AND ";
             if(params["costFrom"]!=undefined)
                 sql+="cost>="+params["costFrom"]+" AND ";
             if(params["costTo"]!=undefined)
                 sql+="cost<="+params["costTo"]+" AND ";
+            if(params["mileageFrom"]!=undefined)
+                sql+="mileage>="+params["mileageFrom"]+" AND ";
+            if(params["mileageTo"]!=undefined)
+                sql+="mileage<="+params["mileageTo"]+" AND ";
             if(params["volumeFrom"]!=undefined)
                 sql+="volume>="+params["volumeFrom"]+" AND ";
             if(params["volumeTo"]!=undefined)
@@ -157,9 +152,7 @@ let db = function () {
             sql=sql.substr(0, sql.length-4);
         }
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(result){
             callback (result);
         });
     }
@@ -171,9 +164,7 @@ let db = function () {
             "ON car.id_car=image.id_car " +
             "WHERE car.id_car= "+ id["id"] +";";
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(result){
             callback (result);
         });
     }
@@ -183,9 +174,7 @@ let db = function () {
             "WHERE " +
             "id_car="+data.data;
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(result){
             callback (result);
         });
     }
@@ -207,26 +196,18 @@ let db = function () {
             "'"+data.transmission+"'" +
             ");";
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(result){
             sql="INSERT INTO image " +
                 "( photo, id_car ) " +
                 "VALUES ("
                 +"'"+data.photo+"'" +
                 ", (select last_insert_id() from car limit 1));";
 
-            database.get().query(sql, function (err, result) {
-                if(err)
-                    throw err;
-
+            database.get().query(sql).then(function(result){
                 sql = "SELECT * FROM car INNER JOIN image on car.id_car=image.id_image WHERE car.id_car=(select last_insert_id() from car limit 1);";
 
-                database.get().query(sql, function (err, result) {
-                    if (err)
-                        throw err;
-                    console.log(result);
-                    callback(result);
+                database.get().query(sql).then(function(result){
+                    callback (result);
                 });
             });
         });
@@ -244,24 +225,72 @@ let db = function () {
             "transmission = '" + data.transmission +"' " +
             "WHERE id_car=" + data.id_car + "; ";
 
-        database.get().query(sql, function (err, result) {
-            if(err)
-                throw err;
+        database.get().query(sql).then(function(){
             sql="UPDATE image SET " +
                 "photo = '" + data.photo +"' " +
                 "WHERE id_car=" + data.id_car + ";";
 
-            database.get().query(sql, function (err, result) {
-                if (err)
-                    throw err;
+            database.get().query(sql).then(function(){
                 sql = "SELECT * FROM car inner join image on car.id_car=image.id_car WHERE car.id_car =" + data.id_car;
-                database.get().query(sql, function (err, result) {
-                    if (err)
-                        throw err;
-                    console.log(result);
-                    callback(result);
+                database.get().query(sql).then(function(result){
+                    callback (result);
                 });
             });
+        });
+    }
+
+    function getPie(callback) {
+        let res=[];
+
+        sql="SELECT DISTINCT brand FROM car";
+        database.get().query(sql).then(function(distinctBrand) {
+
+            sql = "SELECT count(brand) as total FROM car";
+            database.get().query(sql).then(function (total) {
+
+                distinctBrand.forEach(function (element) {
+                    sql = "SELECT brand, count(brand) as share FROM car WHERE brand='" + element.brand + "';";
+                    database.get().query(sql).then(function (share) {
+                        res.push(share[0]);
+                    });
+                });
+
+                setTimeout(function () {
+                    callback(res);
+                }, 100);
+            });
+        });
+    }
+
+    function getLine(callback) {
+        sql="SELECT sum(cost) as mechanics, year FROM car where transmission='Механика' group by year";
+        database.get().query(sql).then(function (result) {
+            callback(result);
+        });
+    }
+
+    function getRadar(callback) {
+        let res=[];
+
+        sql="SELECT DISTINCT model FROM car";
+        database.get().query(sql).then(function (models) {
+
+            models.forEach(function (element) {
+                sql="SELECT count(model) AS amount, model FROM car WHERE model='"+element.model+"';";
+                database.get().query(sql).then(function (amount) {
+                    res.push({amount: amount[0].amount, model: amount[0].model});
+                });
+            });
+            setTimeout(function () {
+                callback(res);
+            }, 1000);
+        });
+    }
+
+    function getArea(callback) {
+        sql="SELECT sum(cost) as ferrariCost, year FROM car where brand='Ferrari' group by year";
+        database.get().query(sql).then(function (result) {
+            callback(result);
         });
     }
 
@@ -277,7 +306,11 @@ let db = function () {
         executeInsert : executeInsert,
         executeUpdate : executeUpdate,
         getBrand : getBrand,
-        getModel : getModel
+        getModel : getModel,
+        getPie: getPie,
+        getLine: getLine,
+        getRadar: getRadar,
+        getArea: getArea
     }
 }();
 

@@ -19,6 +19,7 @@
     "jquery": "^3.2.1",
     "just": "^0.1.8",
     "mysql": "^2.13.0",
+    "promise-mysql": "^3.0.1",
     "requirejs": "2.3.3"
   }
 }

@@ -1,93 +1,133 @@
-#main-container{
-    height: 100%;
-    width: 100%;
-    overflow-y: auto;
-}
-#selector{
-    margin-left: 20%;
-}
-
-.modal-dialog{
-    top: 15%;
-    width: 30%;
-    height: 70%;
-}
-.modal-body{
-    width: 90%;
-    left: 5%;
-}
-#enter-hello{
-    /*margin-top: 12%;
-    opacity: 0.5;*/
-}
 body{
-    /*background-image: url('../resource/hello-page.jpg');*/
+    overflow-y: auto;
     background-attachment: fixed;
     background-size: cover;
     height: 100%;
     width: 100%;
     position: fixed;
 }
+html{
+    overflow-y: hidden;
+}
+#main-container{
+    height: 100%;
+    overflow-y: hidden;
+}
 
-#jumbotron-hello > div{
-    background-color: transparent;
-    color: wheat;
-}
-#jumbotron-auth > div {
-    background-color: transparent;
-    color: wheat;
-}
-#jumbotron-hello button{
-    background-color: wheat;
-    color: black;
-    border-color: wheat;
-    font-size: 20px;
-    font-weight: bold;
+/*-----------------mainView--------------------*/
+
+#mainView{
+    margin-right: 7%;
 }
 
 
-/*for profile*/
+/*-------------------details----------------------*/
+
+#car-info{
+    margin-top: 7%;
+    padding: 20px;
+    color: beige;
+    background-color: black;
+}
+
+/*-------------------search-----------------------*/
+
+.searchCar{
+    float: left;
+    position: relative;
+    width: 700px;
+    height: 150px;
+}
+
+.searchCar  img{
+    width: 270px;
+    height: 140px;
+}
+
+.rowd{
+    position: static;
+    display: inline-table;
+    height: 150px;
+}
+ul{
+    list-style: none;
+}
+.name{
+    width: 170px;
+}
 
 
-/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
-/*.row.content {height: 1500px}*/
 
-/* Set gray background color and 100% height */
+
+
+#selector{
+    margin-left: 20%;
+}
+
+#content{
+    height: 700px;
+}
+#searchList{
+    min-height: 100%;
+}
+#list {
+    padding: 10px 5px;
+    margin-left: 10%;
+    margin-bottom: -1px;
+    min-height: 100%;
+}
+.car {
+    float: left;
+    position: relative;
+    height: 170px;
+    margin: 0 5px;
+    padding: 0;
+}
+.car img {
+    width: 210px;
+}
+.car h3 {
+    margin: 0;
+    padding: 3px 5px 0 0;
+    max-width: 200px;
+    overflow: hidden;
+    line-height: 1.3em;
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+    color: #999;
+}
+
+#cost-info {
+    visibility: hidden;
+}
+.car:hover #cost-info {
+    visibility: visible;
+    position: absolute;
+    width: 210px;
+    height: 105px;
+    top: 0;
+    margin: 0;
+    padding-top: 15px;
+    line-height: 110px;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    background-color: rgba(0,0,0,0.75);
+    transition: background .2s linear, color .2s linear;
+    -moz-transition: background .2s linear, color .2s linear;
+    -webkit-transition: background .2s linear, color .2s linear;
+    -o-transition: background .2s linear, color .2s linear;
+}
+.k-listview:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
 .sidenav {
     background-color: #f1f1f1;
     height: 100%;
 }
-
-/* Set black background color, white text and some padding */
-
-
-/*table*/
-#table{
-    width: 64%;
-}
-
-
-h6{
-    margin: 0;
-}
-
-#more {
-    background-color: wheat;
-
-    font-size: 25px;
-    width: 400px;
-    height: 300px;
-    top: 100px;
-    position: absolute;
-    display: none;
-}
-
-#table2 > tr{
-    border: none;
-}
-
-#search-conteiner{
-
-}
-
-

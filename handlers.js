@@ -9,10 +9,22 @@ function home(db) {
     }
     
     function getMainTable(req, res) {
-        console.log('here');
-        db.select25(function (result) {
-            res.json(result);
-        })
+        if(Object.keys(req.query).length == 0){
+            db.select25(function (result) {
+                res.json(result);
+            })
+        }
+        else if(req.query.id) {
+            const searchEl = req.query["id"].split('+').join(' ');
+            db.search(searchEl, function (result) {
+                res.json(result);
+            });
+        }
+        else {
+            db.filter(req.query, function (result) {
+                res.json(result);
+            })
+        }
     }
 
     function getCar(req, res) {
@@ -42,8 +54,9 @@ function home(db) {
     }
 
     function getFilter(req, res) {
+        console.log('filter');
         db.filter(req.query, function (result) {
-            res.send(JSON.stringify(result));
+            res.json(result);
         })
     }
 
@@ -78,8 +91,31 @@ function home(db) {
     }
 
     function updateRecord(req, res) {
-        console.log('update');
         db.executeUpdate(req.body, function (result) {
+            res.json(result);
+        })
+    }
+
+    function getPieChart(req, res) {
+        db.getPie(function (result) {
+            res.json(result);
+        })
+    }
+
+    function getLineChart(req, res) {
+        db.getLine(function (result) {
+            res.json(result);
+        })
+    }
+
+    function getRadarChart(req, res) {
+        db.getRadar(function (result) {
+            res.json(result);
+        })
+    }
+
+    function getAreaChart(req, res) {
+        db.getArea(function (result) {
             res.json(result);
         })
     }
@@ -97,7 +133,11 @@ function home(db) {
         saveRecord : saveRecord,
         updateRecord : updateRecord,
         getModel : getModel,
-        getBrand : getBrand
+        getBrand : getBrand,
+        getPieChart: getPieChart,
+        getLineChart: getLineChart,
+        getRadarChart: getRadarChart,
+        getAreaChart: getAreaChart
     }
 }
 

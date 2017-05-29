@@ -2,7 +2,7 @@
  * Created by User on 07.05.2017.
  */
 
-const mysql = require('mysql');
+const mysql = require('promise-mysql');
 const async = require('async');
 let jsonObj =require('./json/cars.json');
 
@@ -12,13 +12,16 @@ let db = function() {
 
     function get(done) {
         if(!connection){
-            connection = mysql.createConnection({
+            mysql.createConnection({
                 host : 'localhost',
                 user: 'root',
                 password: 'root',
                 database: 'coursesdb',
+            }).then(function(conn){
+                connection=conn;
+                done();
             });
-            done();
+
         }
         else {
             return connection;

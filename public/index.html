@@ -1,28 +1,347 @@
 <!DOCTYPE html>
+<html>
 <head>
     <title>infocar</title>
     <meta charset="utf-8">
     <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
-
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.common-material.min.css" />
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.material.min.css" />
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.504/styles/kendo.material.mobile.min.css" />
-
     <script src="https://kendo.cdn.telerik.com/2017.2.504/js/jquery.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2017.2.504/js/kendo.all.min.js"></script>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/my.css">
-
+    <!--<script type="text/javascript" src="app.js" defer></script>
+    <script src="/admin/presenter/adminHandlers.js"></script>-->
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" defer></script>-->
     <script data-main="/app" src="/scripts/require.js" defer></script>
-    <!--<script src="/app.js" type="text/javascript" defer></script>-->
-
-
     </head>
-<body>
-<div class="container" id="main-container">
+<body id="body">
 
+<script type="text/x-kendo-tmpl" id="main-view-template">
+    <div id="searchPlace">
+    <form class="form-inline" id="searchForm">
+            <div class="input-group col-sm-4 col-sm-offset-4">
+                <input id="search-input" type="text" class="form-control input-lg" placeholder="Search..." data-bind="value: search">
+                <span class="input-group-btn">
+                      <a id="searchBtn" class="btn btn-default btn-lg" data-bind="attr: {href: searchHref }">
+                        <span class="glyphicon glyphicon-search"></span>
+                      </a>
+                </span>
+            </div>
+        </form>
+    </div>
+    <div id="mainView">
+        <div id="content" class="demo-section k-content wide">
+            <div id="list" data-role="listview"
+                 data-template="cell-template"
+                 data-bind="source: cars"
+                 style="height: 300px; overflow: auto">
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="cell-template">
+    <a class="viewDetails" href="\#/car/#:id_car#">
+        <div class="car k-widget">
+            <img src=#:photo# alt="car">
+            <h3><b>#:brand# #:model#</b></h3>
+            <h3>#:year# г</h3>
+            <div id="cost-info">
+                <h3>#:cost# BYN</h3>
+                <h3>#:cost*0.53.toFixed(1)# $</h3>
+                <h3>#:cost*0.48.toFixed(1)# euro</h3><br/>
+            </div>
+        </div>
+    </a>
+</script>
+
+<script type="text/x-kendo-tmpl" id="car-details">
+    <div id="car-info" class="col-sm-8 col-sm-offset-2">
+        <h1 data-bind="text: getName"></h1>
+        <div class="media">
+            <div class="media-body">
+                <div class="media-heading">
+                    <p class="price" data-bind="text: getCost"></p>
+                </div>
+                <table class="table">
+                    <tr>
+                        <td>Год выпуска</td>
+                        <td data-bind="text: current.year"></td>
+                    </tr>
+                    <tr>
+                        <td>Пробег</td>
+                        <td data-bind="text: current.mileage"></td>
+                    </tr>
+                    <tr>
+                        <td>Тип топлива</td>
+                        <td data-bind="text: current.typeOfFuel"></td>
+                    </tr>
+                    <tr>
+                        <td>Объем</td>
+                        <td data-bind="text: current.volume"></td>
+                    </tr>
+                    <tr>
+                        <td>Трансмиссия</td>
+                        <td data-bind="text: current.transmission"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="media-right">
+                <img data-bind="attr: {src: current.photo}" class="media-object img-rounded" style="width:450px">
+            </div>
+        </div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="search-filter-template">
+<div id="searchAndFilter">
+    <div class="col-sm-8" id="results-place">
+    </div>
+    <div class="col-sm-2" id="filter-place"></div>
 </div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="results-template">
+    <div id="results">
+        <div id="content" class="demo-section k-content wide">
+            <div id="searchList" data-role="listview"
+                 data-template="car-res-template"
+                 data-bind="source: cars"
+                 style="height: 300px; overflow: auto">
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="car-res-template">
+    <a class="viewDetails" href="\#/car/#:id_car#">
+        <div class="searchCar k-widget">
+            <div class="rowd">
+                <img src=#:photo# alt="car" >
+            </div>
+            <div class="rowd name">
+                <b><h3>#:brand# #:model#</h3></b>
+                <h5>#:cost#BYN</h5>
+            </div>
+            <div class="rowd">
+                <ul>
+                    <li>Год выпуска:     #:year#</li>
+                    <li>Пробег:          #:mileage#</li>
+                    <li>Тип топлива:     #:typeOfFuel#</li>
+                    <li>Тип трансмиссии: #:transmission#</li>
+                </ul>
+            </div>
+        </div>
+    </a>
+</script>
+
+<script type="text/x-kendo-tmpl" id="filter-template">
+    <div id="selector">
+        <form class="k-form">
+            <fieldset style="width: 300px">
+                <legend>Параметры автомобиля</legend>
+                <div class="form-group">
+                    <label class="k-form-field" for="brand"><span>Марка автомобиля</span></label><br/>
+                    <input id="brand" data-role="autocomplete"
+                           data-placeholder="Введите марку"
+                           data-text-field="brand"
+                           data-value-primitive="true"
+                           data-bind="value: selected.brand,
+                                                 source: brands,
+                                                 events:{select: onSelect}" style="width: 300px"><br/>
+                </div>
+                <div class="form-group">
+                    <label class="k-form-field" for="model"><span>Модель автомобиля</span></label><br/>
+                    <input id="model" data-role="autocomplete"
+                           data-placeholder="Введите модель"
+                           data-text-field="model"
+                           data-value-primitive="true"
+                           data-bind="value: selected.model,
+                                      source: models" style="width: 300px"><br/>
+                </div>
+                <div class="form-group">
+                    <label class="k-form-field" for="year"><span>Год выпуска</span></label><br/>
+                    <div id="year" data-role="rangeslider"
+                         data-tooltip="{format: '{0:#####}'}"
+                         data-min="1980"
+                         data-max="2020"
+                         data-small-step="1"
+                         data-large-step="10"
+                         data-bind="value: selected.year" style="width: 300px">
+                        <input/>
+                        <input/>
+                    </div><br/>
+                </div>
+                <div class="form-group">
+                    <label class="k-form-field"><span>Цена</span></label><br/>
+                    <div id="cost" data-role="rangeslider"
+                         data-min="0"
+                         data-max="10000"
+                         data-small-step="500"
+                         data-large-step="5000"
+                         data-tick-placement="both"
+                         data-bind="value: selected.cost" style="width: 300px">
+                        <input/>
+                        <input/>
+                    </div><br/>
+                </div>
+                <div class="form-group">
+                    <label class="k-form-field"><span>Тип топлива</span></label><br/>
+                    <input type="radio" class="k-radio" id="radio1" name="typeOfFuel" value="Бензин" data-bind="checked: selected.typeOfFuel">
+                    <label class="k-radio-label" for="radio1" style="width: 100px">Бензин</label>
+                    <input type="radio" class="k-radio" id="radio2" name="typeOfFuel" value="Дизель" data-bind="checked: selected.typeOfFuel">
+                    <label class="k-radio-label" for="radio2" style="width: 100px">Дизель</label>
+                </div>
+                <div class="form-group">
+                    <label class="k-form-field"><span>Тип трансмиссии</span></label><br/>
+                    <input type="radio" class="k-radio" id="radio3" name="transmission" value="Механика" data-bind="checked: selected.transmission">
+                    <label class="k-radio-label" for="radio3" style="width: 100px">Механика</label>
+                    <input type="radio" class="k-radio" id="radio4" name="transmission" value="Автомат" data-bind="checked: selected.transmission">
+                    <label class="k-radio-label" for="radio4" style="width: 100px">Автомат</label>
+                </div>
+                <div class="form-group">
+                    <label class="k-form-field"><span>Объем двигателя</span></label><br/>
+                    <input data-role="numerictextbox"
+                           data-format="####"
+                           data-min="1000"
+                           data-max="4000"
+                           data-bind="value: selected.volume" style="width: 300px">
+                </div>
+                <div class="form-group">
+                    <label class="k-form-field"><span>Пробег</span></label><br/>
+                    <input data-role="numerictextbox"
+                           data-format="#####"
+                           data-min="0"
+                           data-bind="value: selected.mileage" style="width: 300px"><br/>
+                </div>
+                <div class="form-group">
+                    <button id="primaryTextButton" class="btn k-primary" data-bind="events:{click: onClick}" style="width: 300px">ПРИМЕНИТЬ ФИЛЬТР</button>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="chart-template">
+<div class="container">
+    <div id="radar-place"></div>
+    <div id="pie-place"></div>
+    <div id="line-place"></div>
+    <div id="area-place"></div>
+</div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="pie-chart-template">
+<div id="pieChart">
+    <div class="demo-section k-content">
+        <div>
+            <div data-role="chart"
+                 data-title="{ text: 'BRAND SHARE', position: 'top' }"
+                 data-legend="{position: 'top'}"
+                 data-series="[{
+                                type: 'pie',
+                                field: 'share',
+                                categoryField: 'brand',
+                                padding: 0,
+                                tooltip: {visible:true,
+                                          format: 'NO',
+                                          template: '#= category # - #= kendo.format(\'{0:P}\', percentage)#'}
+                              }]"
+                 data-series-defaults="{labels: {
+                                                template: '#= category # - #= kendo.format(\'{0:P}\', percentage)#',
+                                                position: 'insideEnd',
+                                                color: 'black',
+                                                visible: true,
+                                                background: 'transparent'
+                                         }
+                                       }"
+                 data-bind="source: brandShare" style="height: 700px">
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="line-chart-template">
+<div id="lineChart">
+    <div class="demo-section k-content wide">
+        <div data-role="chart"
+             data-title="{ text: 'MECHANICAL TRANSMISSION DEPENDENCE ON COST', position: 'top' }"
+             data-legend="{ position: 'bottom' }"
+             data-series="[
+                            { field: 'mechanics', name: 'Mechanical transmission' }
+                          ]"
+             data-series-defaults="{ type: 'line',
+                                    tooltip: {
+                                        visible: true,
+                                        position: 'bottom',
+                                        format: 'NO',
+                                        template: '#= category # г - #=value#$'
+                                    }
+                                   }"
+
+             data-category-axis="{
+                                    field: 'year',
+                                    labels:{rotation: -90},
+                                    crosshair: {visible: true}
+                                }"
+             data-bind="source: transmissionCost" style="height: 700px">
+        </div>
+    </div>
+</div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="radar-chart-template">
+<div id="radarChart">
+    <div class="demo-section k-content wide">
+        <div data-role="chart"
+             data-title="{ text: 'MODEL POPULARITY', position: 'top' }"
+             data-legend="{position: 'bottom'}"
+             data-series-defaults="{type: 'radarColumn',
+                                    tooltip: {
+                                        visible: true,
+                                        format: 'NO',
+                                        template: '#= category # - #=value#'
+                                    }
+                                    }"
+             data-series="[
+                            {field: 'amount', name: 'Amount'}
+                          ]"
+             data-category-axis="{field: 'model'}"
+             data-bind="source: modelFrequency" style="height: 750px">
+        </div>
+    </div>
+</div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="area-chart-template">
+<div id="areaChart">
+    <div class="demo-section k-content wide">
+        <div data-role="chart"
+             data-title="{ text: 'FERRARI BRAND DEPENDENCE ON COST', position: 'top' }"
+             data-legend="{position: 'bottom'}"
+             data-series-defaults="{type: 'area',
+                                    area: {line: {style: 'smooth'},
+                                    tooltip: {
+                                        visible: true,
+                                        format: 'NO',
+                                        template: '#= category # г - #=value#$'
+                                    }
+                                    }
+                                    }"
+             data-series="[
+                            {field: 'ferrariCost', name: 'Ferrari'}
+                           ]"
+             data-category-axis="{field: 'year'}"
+             data-bind="source: brandCost" style="height: 750px">
+
+        </div>
+    </div>
+</div>
+</script>
+
+
 </body>
 </html>
